@@ -1,0 +1,36 @@
+name: Quet view TikTok theo thang
+
+on:
+  workflow_dispatch:
+    inputs:
+      handle:
+        description: "Tên kênh TikTok (không có @)"
+        default: "mobilelegendsvn_funtap"
+      months:
+        description: "Số tháng gần nhất cần lấy"
+        default: "12"
+      max_pages:
+        description: "Số lần gọi API tối đa (mỗi lần tốn credit)"
+        default: "10"
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests
+      - run: python tiktok.py
+        env:
+          SCRAPECREATORS_API_KEY: ${{ secrets.SCRAPECREATORS_API_KEY }}
+          HANDLE: ${{ inputs.handle }}
+          MONTHS: ${{ inputs.months }}
+          MAX_PAGES: ${{ inputs.max_pages }}
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: tiktok-views
+          path: "*.csv"
+          if-no-files-found: ignore
