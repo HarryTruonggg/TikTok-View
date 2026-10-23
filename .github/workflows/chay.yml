@@ -3,15 +3,12 @@ name: Quet view TikTok theo thang
 on:
   workflow_dispatch:
     inputs:
-      handle:
-        description: "Tên kênh TikTok (không có @)"
-        default: "mobilelegendsvn_funtap"
       months:
         description: "Số tháng gần nhất cần lấy"
-        default: "12"
+        default: "6"
       max_pages:
-        description: "Số lần gọi API tối đa (mỗi lần tốn credit)"
-        default: "10"
+        description: "Số lần gọi API tối đa cho MỖI kênh (mỗi lần tốn credit)"
+        default: "5"
 
 jobs:
   run:
@@ -25,7 +22,6 @@ jobs:
       - run: python tiktok.py
         env:
           SCRAPECREATORS_API_KEY: ${{ secrets.SCRAPECREATORS_API_KEY }}
-          HANDLE: ${{ inputs.handle }}
           MONTHS: ${{ inputs.months }}
           MAX_PAGES: ${{ inputs.max_pages }}
       - uses: actions/upload-artifact@v4
